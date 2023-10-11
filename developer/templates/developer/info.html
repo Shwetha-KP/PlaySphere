@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+{% if user.is_authenticated %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<!-- ### HTML ### -->
+<style>
+  table {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  table,td,th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  table tr:nth-child(even){background-color: #f2f2f2;}
+  
+  table tr:hover {background-color: #ddd;}
+  
+  table,th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #04AA6D;
+    color: white;
+  }
+</style>
+{% with this_game|first as game %}
+  <h2>Info for {{game.name}}</h2>
+  <div class="marginbottom">
+  <table>
+    <tr>
+      <th>Price</th>
+      <th>Url</th>
+      <th>Items sold</th>
+    </tr>
+    <tr>
+      <td style="color:black">{{game.price}} INR</td>
+      <td><a class="multiline" href="{{game.url}}">{{game.url}}</a></td>
+      <td style="color:black">{{sold_items}} pcs</td>
+    </tr>
+  </table>
+</div>
+{% endwith %}
+<div class="marginbottom">
+  <h3>Sales statistics</h3>
+  <table>
+  <tr>
+    <th style="text-align:left">Buyer</th>
+    <th style="text-align:left">Buying time</th>
+  </tr>
+  {% for sale in single_game_stats %}
+  <tr>
+    <td style="color:black"> {{ sale.user }}</td>
+    <td style="color:black"> {{ sale.time }}</td>
+  </tr>
+  {% endfor%}
+  </table>
+</div>
+
+{% endif %}
+{% endblock %}

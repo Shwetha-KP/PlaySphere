@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/gameview.css' %}">
+<style>
+  #tbl, #tbl tr, #tbl th, #tbl td{
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 5px;
+  }
+  #tbl{
+    width: 100%;
+  }
+</style>
+{% endblock %}
+
+{% block javascript %}
+<script>
+  var csrf = "{% csrf_token %}"
+</script>
+<script src='/static/gameview/main.js'></script>
+{% endblock %}
+
+{% block meta %}
+<meta property="og:title"         content="AKA Gamestore - {{game.name}}" />
+<meta property="og:description"   content="{{game.description}}" />
+<meta property="og:image"         content="https://wsd2017gamestore.herokuapp.com/static/common/icons/game-pic.png" />
+<meta property="og:url"           content="https://wsd2017gamestore.herokuapp.com/game/{{game.id}}/" />
+<meta property="og:type"          content="website" />
+{% endblock %}
+
+{% block content %}
+  <h2 class="inline-block">{{game.name}}</h2>
+  {% if not owned and not developed %}
+  <p class="game-price inline-block">{{game.price}}₹</p>
+  {% endif %}
+  <p>{{game.description}}</p>
+  <div id="frame_div"></div>
+  <div id="message"></div>
+
+  {% if owned or developed %}
+      <iframe width="100%" height="500px" src="{{ game.url }}" scrolling="no" style="border:none"></iframe>
+      <br><br>
+      <div class="row">
+        <div class="col-lg-6">
+          <h3>Reviews</h3>
+            <hr>
+            <table id="tbl">
+              <tr>
+                <th>Id</th>
+      <th>User name</th>
+      <th>Game name</th>
+      <th>Rating</th>
+      <th>Review</th>
+              </tr>
+            {% for obj in object_list %}
+            <tr>
+              <td>{{obj.id}}</td>
+              <td>{{obj.player}}</td>
+              <td>{{obj.game}}</td>
+              <td>{{obj.rating}}</td>
+              <td>{{obj.review}}</td>
+            </tr>
+            {%  endfor %}
+          </table>
+        </div>
+        <div class="col-lg-6">
+          <h3>Feedback</h3>
+          <hr>
+        <form action="http://127.0.0.1:8000/game/{{game_id}}/rating_game/" method="post">
+          {% csrf_token %}
+          <input type="number" placeholder="enter ratings out of 5" maxlength="1" required  name="rate" class="form-control" >
+          <br>
+          <textarea name="reviews" class="form-control" rows="10" required placeholder="enter review"></textarea>
+          <br>
+          <input type="submit" class="btn btn-success" value="Submit">
+        </form>
+      </div>
+      </div>
+  {% elif not logged_in %}
+      <br>
+      <div class='info-modal'>
+          <a class="btn btn-primary" role="button" href="/auth/login/">Log in</a> in order to buy or play this game.
+      </div>
+
+  {% else %}
+      <div class='info-modal'>
+          Please 	<a class="btn btn-primary" role="button" href="payment/">buy</a> this game to play it.
+      </div>
+
+      <br><br><br>
+      <h3>Reviews</h3>
+      <hr>
+      <table id="tbl">
+        <tr>
+          <th>Id</th>
+      <th>User name</th>
+      <th>Game name</th>
+      <th>Rating</th>
+      <th>Review</th>
+        </tr>
+      {% for obj in object_list %}
+      <tr>
+        <td>{{obj.id}}</td>
+        <td>{{obj.player}}</td>
+        <td>{{obj.game}}</td>
+        <td>{{obj.rating}}</td>
+        <td>{{obj.review}}</td>
+      </tr>
+      {%  endfor %}
+    </table>
+  {% endif %}
+
+
+  <br>
+{% endblock %}
