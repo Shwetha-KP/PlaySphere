@@ -72,11 +72,11 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST_PASSWORD = 'wagthscqolszswoi'
+EMAIL_HOST_PASSWORD = 'gfftrdrt'
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'playspheregamestore@gmail.com'
+EMAIL_HOST_USER = 'playsphere@gmail.com'
 EMAIL_PORT = 587
 
 ROOT_URLCONF = 'wsd2017gamestore.urls'
